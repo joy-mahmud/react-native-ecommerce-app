@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
 const jwt = require('jsonwebtoken')
-mongoose.connect("mongodb+srv://joy-mahmud:hUQZMCywj46HszhF@cluster0.7xouwts.mongodb.net/",{
+mongoose.connect("mongodb+srv://joy-mahmud:hUQZMCywj46HszhF@cluster0.7xouwts.mongodb.net/react-native-ecommerce",{
     useNewUrlParser:true, //not required for updated version of mongoose of v6.0.0
     useUnifiedTopology:true //not required for updated version of mongoose of v6.0.0
 
@@ -22,4 +22,73 @@ mongoose.connect("mongodb+srv://joy-mahmud:hUQZMCywj46HszhF@cluster0.7xouwts.mon
 
 app.listen(port,()=>{
     console.log('server is running on port ',port)
+})
+
+const User = require('./models/user')
+const Order = require('./models/order')
+
+const sendVerificationEmail = async (email,verificationToken)=>{
+//create a nodemailer transporter
+const transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+        user:"joymahmud1265@gmail.com",
+        pass:'mumc sqth gmol xgwz'
+    }
+})
+//compose the mail
+const mailOptions ={
+    from:"E-com",
+    to:email,
+    subject:"Email verification",
+    text:`Please click the following link to verify your email:http://192.168.2.143:8000/verify/${verificationToken}`
+}
+try {
+    await transporter.sendMail(mailOptions)
+} catch (error) {
+    console.log("Error sending the mail",error)
+}
+}
+
+//api endpoints
+app.post('/register',async(req,res)=>{
+  try {
+    const {name,email,password}=req.body
+console.log(name,email,password)
+    //check the user is already registered
+    const existingUser= await User.findOne({email})
+    if(existingUser){
+        return res.status(400).json({message:'Email already exists'})
+    }
+    //create a new user
+    const newUser = new User({name,email,password})
+    //generate  a verification token
+    newUser.verificationToken = crypto.randomBytes(20).toString('hex')
+    //save the user to database
+    await newUser.save()
+    //send verification mail to the user
+    sendVerificationEmail(newUser.email,newUser.verificationToken);
+    res.status(200).json({message:"Registration successfull"})
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({message:'Registration failed'})
+  }
+})
+
+//verify token
+app.get('/verify/:token',async(req,res)=>{
+    try {
+        const token =req.params.token
+        const user = await User.findOne({verificationToken:token})
+        if(!user){
+            return res.status(404).json({message:"Invalid verification token"})
+        }
+
+        user.verified = true
+        user.verificationToken = undefined
+        await user.save()
+        res.status(200).json({message:"Email verified successfully"})
+    } catch (error) {
+        res.status(500).json({message:"Email verification failed"})
+    }
 })

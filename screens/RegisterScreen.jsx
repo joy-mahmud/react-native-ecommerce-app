@@ -1,14 +1,35 @@
-import { KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const RegisterScreen = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigattion = useNavigation()
+    const handleRegister =()=>{
+        const user ={
+            name:name,
+            email:email,
+            password:password
+        }
+        console.log(user)
+        axios.post("http://192.168.2.143:8000/register",user)
+        .then((response)=>{
+            console.log(response)
+            Alert.alert("Registration successful","You have registered successfully")
+            setName('')
+            setEmail('')
+            setPassword('')
+        }).catch((error)=>{
+            console.log(error)
+            Alert.alert("Registration failed","An error occured during registration")
+        })
+
+    }
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0, flex: 1 }}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -35,7 +56,7 @@ const RegisterScreen = () => {
                         <Text style={{ fontSize: 16, fontWeight: 500, color: '#007fff' }}>Forgot password?</Text>
                     </View> */}
                     <View style={{ marginTop: 70, alignItems: 'center' }}>
-                        <Pressable style={{ width: 200, backgroundColor: '#febe10', borderRadius: 6, paddingVertical: 10 }}>
+                        <Pressable onPress={handleRegister} style={{ width: 200, backgroundColor: '#febe10', borderRadius: 6, paddingVertical: 10 }}>
                             <Text style={{ textAlign: 'center', color: 'white', fontSize: 16, fontWeight: 'bold', }}>Sigin up</Text>
 
                         </Pressable>
