@@ -29,7 +29,7 @@ const LoginScreen = () => {
                         <Text>Keep me logged in</Text>
                         <Text style={{ fontSize: 16, fontWeight: 500, color: '#007fff' }}>Forgot password?</Text>
                     </View>
-                    <View style={{ marginTop: 90, alignItems: 'center' }}>
+                    <View style={{ marginTop: 70, alignItems: 'center' }}>
                         <Pressable style={{ width: 200, backgroundColor: '#febe10', borderRadius: 6, paddingVertical: 10 }}>
                             <Text style={{ textAlign: 'center', color: 'white', fontSize: 16, fontWeight: 'bold', }}>Login</Text>
 
