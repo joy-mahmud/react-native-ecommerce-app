@@ -1,5 +1,5 @@
 import { Alert, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,19 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigation = useNavigation()
+    useEffect(()=>{
+        const checkLoginStatus = async()=>{
+            try {
+               const token = AsyncStorage.getItem('authToken');
+               if(token){
+                navigation.replace('Main')
+               } 
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        checkLoginStatus();
+    },[])
     const handleLogin =()=>{
         const user = {
             email:email,
@@ -17,10 +30,9 @@ const LoginScreen = () => {
         }
         axios.post('http://192.168.2.143:8000/login',user)
         .then((response)=>{
-            console.log(response)
             const token = response.data.token
             AsyncStorage.setItem('authToken',token)
-            navigation.replace("Home")
+            navigation.replace("Main")
         }).catch((error)=>{
             Alert.alert("Login failed","Invalid email")
         })
