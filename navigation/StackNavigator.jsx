@@ -19,6 +19,7 @@ function BottomTabs(){
             component={HomeScreen}
             options={{
                 tabBarLabel:"Home",
+                headerShown:false,
                 tabBarLabelStyle:{color:"#008e97"},
                 tabBarIcon:({focused})=> focused?(<Entypo name="home" size={24} color="#008e97" />):(<AntDesign name="home" size={24} color="#008e97" />)
             }}
