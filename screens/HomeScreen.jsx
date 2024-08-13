@@ -3,6 +3,7 @@ import React from 'react'
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { SliderBox } from 'react-native-image-slider-box';
 const HomeScreen = () => {
     const gadgets = [
         {
@@ -46,6 +47,11 @@ const HomeScreen = () => {
             "image": "https://i.ibb.co/3N1tGdN/macbook.jpg"
         }
     ]
+    const sliderImages = [
+        "https://i.ibb.co/x2zjB9q/laptop-gadgets.jpg",
+        "https://i.ibb.co/fM2QnpN/mobile-gadgets.jpg",
+        "https://i.ibb.co/1myRrYz/electronics.jpg"
+    ]
 
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0, flex: 1, backgroundColor: 'white' }}>
@@ -67,17 +73,26 @@ const HomeScreen = () => {
 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {
-                        gadgets.map((item,index)=>{
-                            return(
-                                <Pressable key={index} style={{alignItems:'center',justifyContent:'center',gap:3,margin:10}}>
-                                    <Image style={{width:50,height:50,borderRadius:50}} source={{uri:item.image}}></Image>
-                                    <Text style={{textAlign:'center',fontSize:16}}>{item.name}</Text>
+                        gadgets.map((item, index) => {
+                            return (
+                                <Pressable key={index} style={{ alignItems: 'center', justifyContent: 'center', gap: 3, margin: 10 }}>
+                                    <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: item.image }}></Image>
+                                    <Text style={{ textAlign: 'center', fontSize: 16 }}>{item.name}</Text>
                                 </Pressable>
                             )
                         })
                     }
 
                 </ScrollView>
+                {/* <SliderBox images={sliderImages}></SliderBox> */}
+                <View>
+                    <Text style={{ fontSize: 18, fontWeight: 500 }}>Trending products</Text>
+                    <View style={{flexDirection:'row', alignItems:'center', flexWrap:'wrap', gap:5}}>
+                        {
+                            sliderImages.map((item, index) => <Image source={{ uri: item }} key={index} style={{ width: 180, height: 180 }}> </Image>)
+                        }
+                    </View>
+                </View>
             </ScrollView>
 
         </SafeAreaView>
