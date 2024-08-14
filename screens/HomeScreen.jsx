@@ -116,30 +116,30 @@ const HomeScreen = () => {
                         }
                     </View> */}
                 </View>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1,alignItems:'center' }}>
                     <Carousel
                         loop
                         pagingEnabled={true}
                         width={width}
-                        height={width / 2}
+                        height={200}
                         autoPlay={true}
                         data={[...new Array(3).keys()]}
-                        scrollAnimationDuration={1000}
+                        scrollAnimationDuration={2000}
                         // onSnapToItem={(index) => console.log('current index:', index)}
                         mode="parallax"
                         modeConfig={{
                           parallaxScrollingScale: 0.9,
-                          parallaxScrollingOffset: 50,
+                          parallaxScrollingOffset: 45,
                         }}
                         renderItem={({ index }) => (
                             <View
                                 style={{
-                                    flex: 1,
-                                    borderWidth: 0,
+                                   
+                                   alignItems:'center',
                                     justifyContent: 'center',
                                 }}
                             >
-                                <Image style={{width:width,height:width}} resizeMode='contain' source={{uri:sliderImages[index]}}/>
+                                <Image style={{width:'100%',height:200,borderRadius:8}} resizeMode='streach' source={{uri:sliderImages[index]}}/>
                                
                             </View>
                         )}
