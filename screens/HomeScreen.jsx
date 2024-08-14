@@ -1,10 +1,12 @@
-import { View, Text, SafeAreaView, Platform, StatusBar, ScrollView, Pressable, TextInput, Image } from 'react-native'
+import { View, Text, SafeAreaView, Platform, StatusBar, ScrollView, Pressable, TextInput, Image, Dimensions } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { SliderBox } from 'react-native-image-slider-box';
+import Carousel from 'react-native-reanimated-carousel';
+
 const HomeScreen = () => {
+    const width = Dimensions.get('window').width;
     const gadgets = [
         {
             "id": 1,
@@ -52,6 +54,26 @@ const HomeScreen = () => {
         "https://i.ibb.co/fM2QnpN/mobile-gadgets.jpg",
         "https://i.ibb.co/1myRrYz/electronics.jpg"
     ]
+    // const dummyData = [
+    //     { id: 1, tab: 'tab1' },
+    //     { id: 1, tab: 'tab2' },
+    //     { id: 1, tab: 'tab3' },
+    //     { id: 1, tab: 'tab4' },
+    // ]
+    // const myCarousel = ({ data }) => {
+    //     const renderItem = ({ item }) => {
+    //         return <View>
+    //             <Text>{item.tab}</Text>
+    //         </View>
+    //     }
+    //     return (<Carousel
+    //         data={data}
+    //         renderItem={renderItem}
+    //         sliderWidth={screenWidth}
+    //         itemWidth={screenWidth}
+    //         layout='default'
+    //     />)
+    // }
 
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0, flex: 1, backgroundColor: 'white' }}>
@@ -85,13 +107,43 @@ const HomeScreen = () => {
 
                 </ScrollView>
                 {/* <SliderBox images={sliderImages}></SliderBox> */}
+                {/* <myCarousel data={dummyData}></myCarousel> */}
                 <View>
                     <Text style={{ fontSize: 18, fontWeight: 500 }}>Trending products</Text>
-                    <View style={{flexDirection:'row', alignItems:'center', flexWrap:'wrap', gap:5}}>
+                    {/* <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 5 }}>
                         {
                             sliderImages.map((item, index) => <Image source={{ uri: item }} key={index} style={{ width: 180, height: 180 }}> </Image>)
                         }
-                    </View>
+                    </View> */}
+                </View>
+                <View style={{ flex: 1 }}>
+                    <Carousel
+                        loop
+                        pagingEnabled={true}
+                        width={width}
+                        height={width / 2}
+                        autoPlay={true}
+                        data={[...new Array(3).keys()]}
+                        scrollAnimationDuration={1000}
+                        // onSnapToItem={(index) => console.log('current index:', index)}
+                        mode="parallax"
+                        modeConfig={{
+                          parallaxScrollingScale: 0.9,
+                          parallaxScrollingOffset: 50,
+                        }}
+                        renderItem={({ index }) => (
+                            <View
+                                style={{
+                                    flex: 1,
+                                    borderWidth: 0,
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Image style={{width:width,height:width}} resizeMode='contain' source={{uri:sliderImages[index]}}/>
+                               
+                            </View>
+                        )}
+                    />
                 </View>
             </ScrollView>
 
