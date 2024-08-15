@@ -1,11 +1,14 @@
 import { View, Text, SafeAreaView, Platform, StatusBar, ScrollView, Pressable, TextInput, Image, Dimensions } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-reanimated-carousel';
+import axios from 'axios';
+import ProductItem from '../components/ProductItem';
 
 const HomeScreen = () => {
+    const [products,setProducts]=useState([])
     const width = Dimensions.get('window').width;
     const gadgets = [
         {
@@ -54,6 +57,16 @@ const HomeScreen = () => {
         "https://i.ibb.co/fM2QnpN/mobile-gadgets.jpg",
         "https://i.ibb.co/1myRrYz/electronics.jpg"
     ]
+    useEffect(()=>{
+        const getProducts = async ()=>{
+            const response = await axios.get('https://fakestoreapi.com/products')
+            setProducts(response.data)
+            console.log(products)
+        }
+        getProducts()
+     
+    },[])
+    console.log(products[0])
     // const dummyData = [
     //     { id: 1, tab: 'tab1' },
     //     { id: 1, tab: 'tab2' },
@@ -144,6 +157,11 @@ const HomeScreen = () => {
                             </View>
                         )}
                     />
+                </View>
+                <View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}}>
+                    {
+                        products?.map((item,index)=><ProductItem key={index} item={item}/>)
+                    }
                 </View>
             </ScrollView>
 
