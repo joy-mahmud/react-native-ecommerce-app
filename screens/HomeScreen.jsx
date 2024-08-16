@@ -61,12 +61,12 @@ const HomeScreen = () => {
         const getProducts = async ()=>{
             const response = await axios.get('https://fakestoreapi.com/products')
             setProducts(response.data)
-            console.log(products)
+            // console.log(products)
         }
         getProducts()
      
     },[])
-    console.log(products[0])
+    // console.log(products[0])
     // const dummyData = [
     //     { id: 1, tab: 'tab1' },
     //     { id: 1, tab: 'tab2' },
