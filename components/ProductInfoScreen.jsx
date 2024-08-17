@@ -2,12 +2,19 @@ import { View, Text, SafeAreaView, Platform, StatusBar, Image, Dimensions, TextI
 import React from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../redux/cartReducer';
 
 const ProductInfoScreen = () => {
     const route = useRoute()
     const productInfo = route.params
     const width = Dimensions.get('window').width - 10
-
+    const dispatch =useDispatch()
+    const addItemToCart =(item)=>{
+        dispatch(addToCart(item))
+    }
+    const cart = useSelector((state)=>state.cart.cart)
+    console.log(cart)
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white', paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0 }}>
             <ScrollView style={{ marginHorizontal: 5, }} showsVerticalScrollIndicator={false}>
@@ -26,7 +33,7 @@ const ProductInfoScreen = () => {
 
                 <Text>{productInfo.description}</Text>
                 <Text style={{ marginTop: 15, fontWeight: 500, fontSize: 18 }}>Price: ${productInfo.price}</Text>
-                <Pressable style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
+                <Pressable onPress={()=>addItemToCart(productInfo)} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
                     <Text style={{ fontSize: 16, fontWeight: 500 }}>Add to cart</Text>
                 </Pressable>
                 <Pressable style={{ backgroundColor: '#e6ad00', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>

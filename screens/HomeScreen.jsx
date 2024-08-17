@@ -6,6 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-reanimated-carousel';
 import axios from 'axios';
 import ProductItem from '../components/ProductItem';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
     const [products,setProducts]=useState([])
@@ -66,6 +67,9 @@ const HomeScreen = () => {
         getProducts()
      
     },[])
+
+    const cart = useSelector((state)=>state.cart.cart)
+    console.log(cart)
     // console.log(products[0])
     // const dummyData = [
     //     { id: 1, tab: 'tab1' },
