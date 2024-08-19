@@ -6,15 +6,16 @@ import { MaterialIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-reanimated-carousel';
 import axios from 'axios';
 import ProductItem from '../components/ProductItem';
-import { useDispatch, useSelector } from 'react-redux';
+import Entypo from '@expo/vector-icons/Entypo';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { BottomModal, ModalContent, SlideAnimation } from 'react-native-modals';
-import { addToCart } from '../redux/cartReducer';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
     const [products, setProducts] = useState([])
     const [modalVisible, setmodalVisible] = useState(false)
     const width = Dimensions.get('window').width;
-  
+    const navigation = useNavigation()
     const gadgets = [
         {
             "id": 1,
@@ -74,7 +75,7 @@ const HomeScreen = () => {
 
     const cart = useSelector((state) => state.cart.cart)
     // console.log(cart)
-    
+
     // console.log(products[0])
     // const dummyData = [
     //     { id: 1, tab: 'tab1' },
@@ -110,7 +111,7 @@ const HomeScreen = () => {
                         <Feather name="mic" size={24} color="black" />
 
                     </View>
-                    <Pressable onPress={()=>setmodalVisible(!modalVisible)} style={{ padding: 10, flexDirection: 'row', gap: 5, backgroundColor: "#afeeee", alignItems: 'center' }}>
+                    <Pressable onPress={() => setmodalVisible(!modalVisible)} style={{ padding: 10, flexDirection: 'row', gap: 5, backgroundColor: "#afeeee", alignItems: 'center' }}>
                         <Ionicons name="location-outline" size={24} color="black" />
                         <Text>Deliver to Joy mahmud dhaka-1207</Text>
                         <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
@@ -129,10 +130,10 @@ const HomeScreen = () => {
                         }
 
                     </ScrollView>
-             
+
                     <View>
                         <Text style={{ fontSize: 18, fontWeight: 500 }}>Trending products</Text>
-                    
+
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
                         <Carousel
@@ -186,8 +187,28 @@ const HomeScreen = () => {
             >
                 <ModalContent style={{ width: '100%', height: 400 }}>
                     <View>
-                        <Text>Choose your location</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '500' }}>Choose your location</Text>
+                        <Text style={{ fontSize: 13, fontWeight: '400' }}>Select a delivery location to see product availability and delivery options</Text>
                     </View>
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                        <Pressable onPress={() => navigation.navigate('location')} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
+                            <Text>Select your location</Text>
+                        </Pressable>
+                        <View style={{flexDirection:'row',gap:5,alignItems:'center'}}>
+                            <Entypo name="location-pin" size={24} color="#0066b2" />
+                            <Text style={{color:'#0066b2'}} >Enter an indial precode</Text>
+                 
+                        </View>
+                        <View style={{flexDirection:'row',gap:5,alignItems:'center'}}>
+                        <MaterialIcons name="location-searching" size={24} color="#0066b2" />
+                            <Text style={{color:'#0066b2'}} >use my current location</Text>
+                        </View>
+                        <View style={{flexDirection:'row',gap:5,alignItems:'center'}}>
+                        <AntDesign name="earth" size={24} color="#0066b2" />
+                            <Text style={{color:'#0066b2'}} >Deliver outside india</Text>
+                        </View>
+                    </ScrollView>
+
                 </ModalContent>
             </BottomModal>
         </>
