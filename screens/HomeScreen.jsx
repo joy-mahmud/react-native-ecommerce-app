@@ -73,7 +73,7 @@ const HomeScreen = () => {
 
     }, [])
 
-    const cart = useSelector((state) => state.cart.cart)
+    // const cart = useSelector((state) => state.cart.cart)
     // console.log(cart)
 
     // console.log(products[0])
@@ -187,27 +187,29 @@ const HomeScreen = () => {
             >
                 <ModalContent style={{ width: '100%', height: 400 }}>
                     <View>
-                        <Text style={{ fontSize: 16, fontWeight: '500' }}>Choose your location</Text>
-                        <Text style={{ fontSize: 13, fontWeight: '400' }}>Select a delivery location to see product availability and delivery options</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '500',marginBottom:5 }}>Choose your location</Text>
+                        <Text style={{ fontSize: 13, fontWeight: '400',color:"gray" }}>Select a delivery location to see product availability and delivery options</Text>
                     </View>
-                    <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                        <Pressable onPress={() => navigation.navigate('location')} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
-                            <Text>Select your location</Text>
+                    <View  style={{flexDirection:'column', }}>
+                        <Pressable onPress={() =>{setmodalVisible(false); navigation.navigate('Address')}} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
+                            <Text style={{fontWeight:500}}>Select your location</Text>
                         </Pressable>
-                        <View style={{flexDirection:'row',gap:5,alignItems:'center'}}>
-                            <Entypo name="location-pin" size={24} color="#0066b2" />
-                            <Text style={{color:'#0066b2'}} >Enter an indial precode</Text>
-                 
+                        <View style={{flexDirection:'column',marginTop:20,gap:5,}}>
+                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                                <Entypo name="location-pin" size={22} color="#0066b2" />
+                                <Text style={{ color: '#0066b2' }} >Enter an indian precode</Text>
+
+                            </View>
+                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                                <MaterialIcons name="location-searching" size={22} color="#0066b2" />
+                                <Text style={{ color: '#0066b2' }} >use my current location</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                                <AntDesign name="earth" size={22} color="#0066b2" />
+                                <Text style={{ color: '#0066b2' }} >Deliver outside india</Text>
+                            </View>
                         </View>
-                        <View style={{flexDirection:'row',gap:5,alignItems:'center'}}>
-                        <MaterialIcons name="location-searching" size={24} color="#0066b2" />
-                            <Text style={{color:'#0066b2'}} >use my current location</Text>
-                        </View>
-                        <View style={{flexDirection:'row',gap:5,alignItems:'center'}}>
-                        <AntDesign name="earth" size={24} color="#0066b2" />
-                            <Text style={{color:'#0066b2'}} >Deliver outside india</Text>
-                        </View>
-                    </ScrollView>
+                    </View>
 
                 </ModalContent>
             </BottomModal>
