@@ -197,7 +197,7 @@ const HomeScreen = () => {
                         <View style={{flexDirection:'column',marginTop:20,gap:5,}}>
                             <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                                 <Entypo name="location-pin" size={22} color="#0066b2" />
-                                <Text style={{ color: '#0066b2' }} >Enter an indian precode</Text>
+                                <Text style={{ color: '#0066b2' }} >Enter a Bangladeshi precode</Text>
 
                             </View>
                             <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -206,7 +206,7 @@ const HomeScreen = () => {
                             </View>
                             <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                                 <AntDesign name="earth" size={22} color="#0066b2" />
-                                <Text style={{ color: '#0066b2' }} >Deliver outside india</Text>
+                                <Text style={{ color: '#0066b2' }} >Deliver outside Bangladesh</Text>
                             </View>
                         </View>
                     </View>
