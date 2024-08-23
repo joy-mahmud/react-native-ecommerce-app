@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, Platform, StatusBar, ScrollView, Pressable, TextInput, Image, Dimensions } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -10,12 +10,15 @@ import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { BottomModal, ModalContent, SlideAnimation } from 'react-native-modals';
 import { useNavigation } from '@react-navigation/native';
+import { userType } from '../UserContext';
 
 const HomeScreen = () => {
     const [products, setProducts] = useState([])
     const [modalVisible, setmodalVisible] = useState(false)
     const width = Dimensions.get('window').width;
     const navigation = useNavigation()
+    const { userId } = useContext(userType)
+    const [addresses, setaddresses] = useState([])
     const gadgets = [
         {
             "id": 1,
@@ -72,6 +75,14 @@ const HomeScreen = () => {
         getProducts()
 
     }, [])
+    useEffect(() => {
+        const getAddresses = async () => {
+            const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
+            setaddresses(response.data.addresses)
+        }
+        getAddresses()
+    }, [])
+
 
     // const cart = useSelector((state) => state.cart.cart)
     // console.log(cart)
@@ -187,14 +198,24 @@ const HomeScreen = () => {
             >
                 <ModalContent style={{ width: '100%', height: 400 }}>
                     <View>
-                        <Text style={{ fontSize: 16, fontWeight: '500',marginBottom:5 }}>Choose your location</Text>
-                        <Text style={{ fontSize: 13, fontWeight: '400',color:"gray" }}>Select a delivery location to see product availability and delivery options</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 5 }}>Choose your location</Text>
+                        <Text style={{ fontSize: 13, fontWeight: '400', color: "gray" }}>Select a delivery location to see product availability and delivery options</Text>
                     </View>
-                    <View  style={{flexDirection:'column', }}>
-                        <Pressable onPress={() =>{setmodalVisible(false); navigation.navigate('Address')}} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
-                            <Text style={{fontWeight:500}}>Select your location</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ gap: 5, marginTop: 10 }}>
+                        {
+                            addresses?.map((addr, index) => <View key={index} style={{ width: 130, height: 130, borderWidth: 1, borderColor: "#d0d0d0", borderRadius: 5,alignItems:'center',justifyContent:"center" }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                    <Text style={{ fontSize: 18, fontWeight: '500' }}>{addr.name}</Text>
+                                    <Entypo name="location-pin" size={22} color="red" />
+                                </View>
+                            </View>)
+                        }
+                    </ScrollView>
+                    <View style={{ flexDirection: 'column', }}>
+                        <Pressable onPress={() => { setmodalVisible(false); navigation.navigate('Address') }} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
+                            <Text style={{ fontWeight: 500 }}>Add a location</Text>
                         </Pressable>
-                        <View style={{flexDirection:'column',marginTop:20,gap:5,}}>
+                        <View style={{ flexDirection: 'column', marginTop: 20, gap: 5, }}>
                             <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                                 <Entypo name="location-pin" size={22} color="#0066b2" />
                                 <Text style={{ color: '#0066b2' }} >Enter a Bangladeshi precode</Text>
