@@ -1,8 +1,6 @@
 import { Alert, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
 import { userType } from '../UserContext';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -16,17 +14,9 @@ const AddAddressScreen = () => {
     const [street, setStreet] = useState("")
     const [postalCode, setPostalCode] = useState("")
     const [landmark, setLandmark] = useState("")
-    const { userId, setUserId } = useContext(userType)
+    const { userId} = useContext(userType)
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const token = await AsyncStorage.getItem('authToken')
-            const decodedToken = jwtDecode(token)
-            const userId = decodedToken.userId
-            setUserId(userId)
-        }
-        fetchUser()
-    }, [])
+
 console.log(userId)
 
 const handleAddAddress = ()=>{

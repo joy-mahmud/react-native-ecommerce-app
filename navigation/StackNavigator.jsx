@@ -11,6 +11,7 @@ import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import ProductInfoScreen from '../screens/ProductInfoScreen';
 import AddAddressScreen from '../screens/AddAddressScreen';
+import Addresses from '../screens/Addresses';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 function BottomTabs(){
@@ -55,7 +56,8 @@ const StackNavigator = () => {
                 <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown:false}} />
                 <Stack.Screen name="Main" component={BottomTabs} options={{headerShown:false}} />
                 <Stack.Screen name = "prodInfo" component={ProductInfoScreen} options={{headerShown:false}}/>
-                <Stack.Screen name = "Address" component={AddAddressScreen} options={{headerShown:false}}/>
+                <Stack.Screen name = "Address" component={Addresses} options={{headerShown:false}}/>
+                <Stack.Screen name = "AddAddress" component={AddAddressScreen} options={{headerShown:false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
