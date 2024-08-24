@@ -12,6 +12,8 @@ import { AntDesign } from '@expo/vector-icons';
 import ProductInfoScreen from '../screens/ProductInfoScreen';
 import AddAddressScreen from '../screens/AddAddressScreen';
 import Addresses from '../screens/Addresses';
+import Profilescreen from '../screens/Profilescreen';
+import CartScreen from '../screens/CartScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 function BottomTabs(){
@@ -29,8 +31,9 @@ function BottomTabs(){
             />
               <Tab.Screen 
             name="Profile"
-            component={HomeScreen}
+            component={Profilescreen}
             options={{
+                headerShown:false,
                 tabBarLabel:"Profile",
                 tabBarLabelStyle:{color:"#008e97"},
                 tabBarIcon:({focused})=> focused?(<FontAwesome name="user" size={24} color="#008e97" />):(<FontAwesome name="user-o" size={24} color="#008e97" />)
@@ -38,8 +41,9 @@ function BottomTabs(){
             />
                  <Tab.Screen 
             name="Cart"
-            component={HomeScreen}
+            component={CartScreen}
             options={{
+                headerShown:false,
                 tabBarLabel:"Cart",
                 tabBarLabelStyle:{color:"#008e97"},
                 tabBarIcon:({focused})=> focused?(<AntDesign name="shoppingcart" size={24} color="#008e97" />):(<AntDesign name="shoppingcart" size={24} color="black" />)

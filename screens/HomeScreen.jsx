@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Platform, StatusBar, ScrollView, Pressable, TextInput, Image, Dimensions } from 'react-native'
+import { View, Text, SafeAreaView, Platform, StatusBar, ScrollView, Pressable, TextInput, Image, Dimensions, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,11 +14,13 @@ import { userType } from '../UserContext';
 
 const HomeScreen = () => {
     const [products, setProducts] = useState([])
+    const [loading,setLoading]=useState(false)
     const [modalVisible, setmodalVisible] = useState(false)
     const width = Dimensions.get('window').width;
     const navigation = useNavigation()
     const { userId } = useContext(userType)
     const [addresses, setaddresses] = useState([])
+    const [selectedAddress, setSelectedAddress] = useState('')
     const gadgets = [
         {
             "id": 1,
@@ -68,7 +70,9 @@ const HomeScreen = () => {
     ]
     useEffect(() => {
         const getProducts = async () => {
+            setLoading(true)
             const response = await axios.get('https://fakestoreapi.com/products')
+            setLoading(false)
             setProducts(response.data)
             // console.log(products)
         }
@@ -77,7 +81,9 @@ const HomeScreen = () => {
     }, [])
     useEffect(() => {
         const getAddresses = async () => {
+            setLoading(true)
             const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
+            setLoading(false)
             setaddresses(response.data.addresses)
         }
         getAddresses()
@@ -108,6 +114,11 @@ const HomeScreen = () => {
     //         layout='default'
     //     />)
     // }
+    const handleAddressClicked = (addr) => {
+        const adress = `${addr.name}, ${addr.landmark}, ${addr.street}, ${addr.houseNo}`
+        setSelectedAddress(adress)
+        console.log(addr)
+    }
 
     return (
         <>
@@ -124,7 +135,7 @@ const HomeScreen = () => {
                     </View>
                     <Pressable onPress={() => setmodalVisible(!modalVisible)} style={{ padding: 10, flexDirection: 'row', gap: 5, backgroundColor: "#afeeee", alignItems: 'center' }}>
                         <Ionicons name="location-outline" size={24} color="black" />
-                        <Text>Deliver to Joy mahmud dhaka-1207</Text>
+                       {selectedAddress? <Text>Deliver to {selectedAddress}</Text>:<Text>Add an address</Text>}
                         <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
                     </Pressable>
 
@@ -202,18 +213,19 @@ const HomeScreen = () => {
                         <Text style={{ fontSize: 13, fontWeight: '400', color: "gray" }}>Select a delivery location to see product availability and delivery options</Text>
                     </View>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ gap: 5, marginTop: 10 }}>
+                        
                         {
-                            addresses?.map((addr, index) => <View key={index} style={{ width: 130, height: 130, borderWidth: 1, borderColor: "#d0d0d0", borderRadius: 5,alignItems:'center',justifyContent:"center" }}>
+                            loading?<ActivityIndicator></ActivityIndicator>:addresses?.map((addr, index) => <Pressable onPress={() => handleAddressClicked(addr)} key={index} style={{ width: 130, height: 130, borderWidth: 1, borderColor: "#d0d0d0", borderRadius: 5, alignItems: 'center', justifyContent: "center" }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                                     <Text style={{ fontSize: 18, fontWeight: '500' }}>{addr.name}</Text>
                                     <Entypo name="location-pin" size={22} color="red" />
                                 </View>
-                            </View>)
+                            </Pressable>)
                         }
                     </ScrollView>
                     <View style={{ flexDirection: 'column', }}>
                         <Pressable onPress={() => { setmodalVisible(false); navigation.navigate('Address') }} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
-                            <Text style={{ fontWeight: 500 }}>Add a location</Text>
+                            <Text style={{ fontWeight: 500 }}>Add a adress</Text>
                         </Pressable>
                         <View style={{ flexDirection: 'column', marginTop: 20, gap: 5, }}>
                             <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
