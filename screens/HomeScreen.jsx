@@ -70,9 +70,8 @@ const HomeScreen = () => {
     ]
     useEffect(() => {
         const getProducts = async () => {
-            setLoading(true)
+         
             const response = await axios.get('https://fakestoreapi.com/products')
-            setLoading(false)
             setProducts(response.data)
             // console.log(products)
         }
