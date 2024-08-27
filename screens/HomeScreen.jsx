@@ -14,7 +14,7 @@ import { userType } from '../UserContext';
 
 const HomeScreen = () => {
     const [products, setProducts] = useState([])
-    const [loading,setLoading]=useState(false)
+    const [loading, setLoading] = useState(false)
     const [modalVisible, setmodalVisible] = useState(false)
     const width = Dimensions.get('window').width;
     const navigation = useNavigation()
@@ -70,7 +70,7 @@ const HomeScreen = () => {
     ]
     useEffect(() => {
         const getProducts = async () => {
-         
+
             const response = await axios.get('https://fakestoreapi.com/products')
             setProducts(response.data)
             // console.log(products)
@@ -79,15 +79,15 @@ const HomeScreen = () => {
 
     }, [])
     useEffect(() => {
-        const getAddresses = async () => {
-            setLoading(true)
-            const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
-            setLoading(false)
-            setaddresses(response.data.addresses)
-        }
         getAddresses()
     }, [])
-
+    const getAddresses = async () => {
+        setLoading(true)
+        console.log("modal:", userId)
+        const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
+        setLoading(false)
+        setaddresses(response.data.addresses)
+    }
 
     // const cart = useSelector((state) => state.cart.cart)
     // console.log(cart)
@@ -116,7 +116,7 @@ const HomeScreen = () => {
     const handleAddressClicked = (addr) => {
         const adress = `${addr.name}, ${addr.landmark}, ${addr.street}, ${addr.houseNo}`
         setSelectedAddress(adress)
-        console.log(addr)
+        // console.log(addr)
     }
 
     return (
@@ -134,7 +134,7 @@ const HomeScreen = () => {
                     </View>
                     <Pressable onPress={() => setmodalVisible(!modalVisible)} style={{ padding: 10, flexDirection: 'row', gap: 5, backgroundColor: "#afeeee", alignItems: 'center' }}>
                         <Ionicons name="location-outline" size={24} color="black" />
-                       {selectedAddress? <Text>Deliver to {selectedAddress}</Text>:<Text>Add an address</Text>}
+                        {selectedAddress ? <Text>Deliver to {selectedAddress}</Text> : <Text>Add an address</Text>}
                         <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
                     </Pressable>
 
@@ -212,9 +212,9 @@ const HomeScreen = () => {
                         <Text style={{ fontSize: 13, fontWeight: '400', color: "gray" }}>Select a delivery location to see product availability and delivery options</Text>
                     </View>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ gap: 5, marginTop: 10 }}>
-                        
+
                         {
-                            loading?<ActivityIndicator></ActivityIndicator>:addresses?.map((addr, index) => <Pressable onPress={() => handleAddressClicked(addr)} key={index} style={{ width: 130, height: 130, borderWidth: 1, borderColor: "#d0d0d0", borderRadius: 5, alignItems: 'center', justifyContent: "center" }}>
+                            loading ? <ActivityIndicator></ActivityIndicator> : addresses?.map((addr, index) => <Pressable onPress={() => handleAddressClicked(addr)} key={index} style={{ width: 130, height: 130, borderWidth: 1, borderColor: "#d0d0d0", borderRadius: 5, alignItems: 'center', justifyContent: "center",marginRight:10 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                                     <Text style={{ fontSize: 18, fontWeight: '500' }}>{addr.name}</Text>
                                     <Entypo name="location-pin" size={22} color="red" />

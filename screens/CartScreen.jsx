@@ -6,10 +6,12 @@ import { Feather } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { decrementQuantity, incrementQuantity, removeFromCart } from '../redux/cartReducer';
+import { useNavigation } from '@react-navigation/native';
 
 const CartScreen = () => {
     const cart = useSelector(state => state.cart.cart)
     const dispatch=useDispatch()
+    const navigation = useNavigation()
     const total = cart?.map(item => item.price * item.quantity).reduce((prev, curr) => curr + prev, 0)
     console.log(total)
     const handeleIncrement=(item)=>{
@@ -36,7 +38,7 @@ const CartScreen = () => {
                 <View style={{ marginTop: 10, paddingHorizontal: 5 }}>
                     <Text style={{ fontSize: 16, fontWeight: 400 }}>Subtotal: ${total}</Text>
                 </View>
-                <Pressable style={{
+                <Pressable onPress={()=>navigation.navigate('Confirm')} style={{
                     backgroundColor: "#ffc72c", borderRadius: 5, padding: 10, width: '100%'
                 }}>
                     <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Proceed to buy the items</Text>

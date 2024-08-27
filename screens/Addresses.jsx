@@ -1,8 +1,8 @@
 import { Platform, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { userType } from '../UserContext';
 import axios from 'axios';
 
@@ -11,12 +11,18 @@ const Addresses = () => {
     const { userId } = useContext(userType)
     const [addresses, setaddresses] = useState([])
     useEffect(() => {
-        const getAddresses = async () => {
-            const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
-            setaddresses(response.data.addresses)
-        }
         getAddresses()
     }, [])
+    const getAddresses = async () => {
+        const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
+        setaddresses(response.data.addresses)
+    }
+    useFocusEffect(
+        useCallback(() => {
+            getAddresses()
+          },[])
+        
+    )
     //console.log(addresses)
 
     return (
@@ -26,9 +32,9 @@ const Addresses = () => {
                     <Text style={{ fontSize: 16, fontWeight: 500 }}>Add a new address</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </View>
-                <View style={{ padding: 5, borderRadius: 5, borderColor: "#d0d0d0", borderWidth: 1, marginTop: 10 }}>
+                <View style={{ }}>
                     {
-                        addresses.map((addr, index) => <View key={index} style={{ gap: 5 }} >
+                        addresses.map((addr, index) => <View key={index} style={{ gap: 5,padding: 5, borderRadius: 5, borderColor: "#d0d0d0", borderWidth: 1, marginTop: 10 }} >
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                                 <Text style={{ fontSize: 18, fontWeight: '500' }}>{addr.name}</Text>
                                 <Entypo name="location-pin" size={22} color="red" />
@@ -38,9 +44,7 @@ const Addresses = () => {
                             <Text style={{ fontSize: 16, }}>Jhenaidah,Bangladesh</Text>
                             <Text style={{ fontSize: 16, }}>Phone No:{addr.mobileNo}</Text>
                             <Text style={{ fontSize: 16, }}>Postal code:{addr.postalCode}</Text>
-                        </View>)
-                    }
-                    <View  style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 10 }}>
+                            <View  style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 10 }}>
                         <Pressable>
                             <Text style={{ padding: 5, borderColor: "#d0d0d0", borderRadius: 5, borderWidth: 1 }}>Edit</Text>
 
@@ -51,6 +55,9 @@ const Addresses = () => {
 
                         </Pressable>
                     </View>
+                        </View>)
+                    }
+                  
 
                 </View>
             </Pressable>
