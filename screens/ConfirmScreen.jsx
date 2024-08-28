@@ -2,13 +2,15 @@ import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View, ScrollView, 
 import React, { useContext, useEffect, useState } from 'react'
 import { userType } from '../UserContext'
 import axios from 'axios'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ConfirmScreen = () => {
     const [currentStep, setCurrenStep] = useState(0)
     const { userId } = useContext(userType)
     const [addresses, setaddresses] = useState([])
+    const [selectedAddress, setSelectedAddress] = useState('')
     useEffect(() => {
         getAddresses()
     }, [])
@@ -16,6 +18,12 @@ const ConfirmScreen = () => {
         const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
         setaddresses(response.data.addresses)
     }
+
+    const handleSelectAddress = (addr) => {
+        // console.log(addr)
+        setSelectedAddress(addr)
+    }
+
     // useFocusEffect(
     //     useCallback(() => {
     //         getAddresses()
@@ -47,38 +55,60 @@ const ConfirmScreen = () => {
                     }
                 </View>
                 <View>
-                    <Text>Select an address to Proceed</Text>
-                    <View style={{}}>
-                        {
-                            addresses.map((addr, index) => <View key={index} style={{borderRadius: 5, borderColor: "#d0d0d0", borderWidth: 1,alignItems:'center',flexDirection:'row',marginBottom:5,padding:5,gap:5}}>
-                                <Entypo name="circle" size={24} color="black" />
-                                <View style={{ gap: 5, padding: 5,  marginTop: 10 }} >
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                        <Text style={{ fontSize: 18, fontWeight: '500' }}>{addr.name}</Text>
-                                        <Entypo name="location-pin" size={22} color="red" />
-                                    </View>
-                                    <Text style={{ fontSize: 16, }}>{addr.landmark}</Text>
-                                    <Text style={{ fontSize: 16, }}>{addr.street}</Text>
-                                    <Text style={{ fontSize: 16, }}>Jhenaidah,Bangladesh</Text>
-                                    <Text style={{ fontSize: 16, }}>Phone No:{addr.mobileNo}</Text>
-                                    <Text style={{ fontSize: 16, }}>Postal code:{addr.postalCode}</Text>
-                                    <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 10 }}>
-                                        <Pressable>
-                                            <Text style={{ padding: 5, borderColor: "#d0d0d0", borderRadius: 5, borderWidth: 1 }}>Edit</Text>
 
+                    {
+                        currentStep < 1 && <View style={{}}>
+                            <View style={{ marginVertical: 10, gap: 5, alignItems: 'center', flexDirection: 'row' }}>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Select an address to Proceed</Text>
+                                <AntDesign name="downcircle" size={18} color="black" />
+                            </View>
+
+                            {
+                                addresses.map((addr, index) => <View key={index} style={{ borderRadius: 5, borderColor: "#d0d0d0", borderWidth: 1, alignItems: 'center', flexDirection: 'row', marginBottom: 5, padding: 5, gap: 5 }}>
+                                    <Pressable  onPress={() => handleSelectAddress(addr)}>
+                                        {
+                                            selectedAddress && selectedAddress._id == addr._id ? (<View style={{ height: 24, width: 24 }}><FontAwesome6 name="dot-circle" size={24} color="black" /></View>) : (<View style={{ height: 24, width: 24 }}><Entypo name="circle" size={24} color="black" /></View>)
+                                        }
+
+                                    </Pressable>
+                                    <View style={{ gap: 5, padding: 5, marginTop: 10 }} >
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                            <Text style={{ fontSize: 18, fontWeight: '500' }}>{addr.name}</Text>
+                                            <Entypo name="location-pin" size={22} color="red" />
+                                        </View>
+                                        <Text style={{ fontSize: 16, }}>{addr.landmark}</Text>
+                                        <Text style={{ fontSize: 16, }}>{addr.street}</Text>
+                                        <Text style={{ fontSize: 16, }}>Jhenaidah,Bangladesh</Text>
+                                        <Text style={{ fontSize: 16, }}>Phone No:{addr.mobileNo}</Text>
+                                        <Text style={{ fontSize: 16, }}>Postal code:{addr.postalCode}</Text>
+
+                                        <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 10 }}>
+
+                                            <Pressable>
+                                                <Text style={{ padding: 5, borderColor: "#d0d0d0", borderRadius: 5, borderWidth: 1 }}>Edit</Text>
+
+                                            </Pressable>
+
+                                            <Pressable s>
+                                                <Text style={{ padding: 5, borderColor: "#d0d0d0", borderRadius: 5, borderWidth: 1 }}>Remove</Text>
+
+                                            </Pressable>
+                                        </View>
+                                        <Pressable disabled={selectedAddress&&selectedAddress._id==addr._id?false:true} onPress={() => setCurrenStep(1)}>
+                                            <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 20 }}>
+                                                <Text style={{ fontSize: 16, fontWeight: 500 }}>Proceed with this address</Text>
+                                            </View>
                                         </Pressable>
-
-                                        <Pressable s>
-                                            <Text style={{ padding: 5, borderColor: "#d0d0d0", borderRadius: 5, borderWidth: 1 }}>Remove</Text>
-
-                                        </Pressable>
                                     </View>
-                                </View>
-                            </View>)
-                        }
+                                </View>)
+                            }
 
 
-                    </View>
+                        </View>
+                    }
+                    {currentStep == 1 && <View>
+                        <Text>Delivery details</Text>
+                    </View>}
                 </View>
             </ScrollView>
 

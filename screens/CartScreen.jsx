@@ -24,7 +24,7 @@ const CartScreen = () => {
         dispatch(removeFromCart(item))
     }
     return (
-        <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? 0 : 0, flex: 1, backgroundColor: 'white' }}>
+        <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? 0 : 0, flex: 1, backgroundColor: 'white',marginHorizontal:5 }}>
             <ScrollView>
                 <View style={{ backgroundColor: "#00ced1", padding: 10, flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                     <Pressable style={{ flex: 1, backgroundColor: 'white', flexDirection: "row", gap: 5, alignItems: "center" }}>
@@ -39,7 +39,7 @@ const CartScreen = () => {
                     <Text style={{ fontSize: 16, fontWeight: 400 }}>Subtotal: ${total}</Text>
                 </View>
                 <Pressable onPress={()=>navigation.navigate('Confirm')} style={{
-                    backgroundColor: "#ffc72c", borderRadius: 5, padding: 10, width: '100%'
+                    backgroundColor: "#ffc72c", borderRadius: 5, padding: 10, width: '100%',marginVertical:10
                 }}>
                     <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Proceed to buy the items</Text>
                 </Pressable>
