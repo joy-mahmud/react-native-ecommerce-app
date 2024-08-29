@@ -11,6 +11,7 @@ const ConfirmScreen = () => {
     const { userId } = useContext(userType)
     const [addresses, setaddresses] = useState([])
     const [selectedAddress, setSelectedAddress] = useState('')
+    const [selectDeliveryOption, setSelectDeliveryOption] = useState(false)
     useEffect(() => {
         getAddresses()
     }, [])
@@ -65,7 +66,7 @@ const ConfirmScreen = () => {
 
                             {
                                 addresses.map((addr, index) => <View key={index} style={{ borderRadius: 5, borderColor: "#d0d0d0", borderWidth: 1, alignItems: 'center', flexDirection: 'row', marginBottom: 5, padding: 5, gap: 5 }}>
-                                    <Pressable  onPress={() => handleSelectAddress(addr)}>
+                                    <Pressable onPress={() => handleSelectAddress(addr)}>
                                         {
                                             selectedAddress && selectedAddress._id == addr._id ? (<View style={{ height: 24, width: 24 }}><FontAwesome6 name="dot-circle" size={24} color="black" /></View>) : (<View style={{ height: 24, width: 24 }}><Entypo name="circle" size={24} color="black" /></View>)
                                         }
@@ -94,11 +95,13 @@ const ConfirmScreen = () => {
 
                                             </Pressable>
                                         </View>
-                                        <Pressable disabled={selectedAddress&&selectedAddress._id==addr._id?false:true} onPress={() => setCurrenStep(1)}>
-                                            <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 20 }}>
-                                                <Text style={{ fontSize: 16, fontWeight: 500 }}>Proceed with this address</Text>
-                                            </View>
-                                        </Pressable>
+                                        {
+                                            selectedAddress && selectedAddress._id == addr._id && <Pressable onPress={() => setCurrenStep(1)}>
+                                                <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 20 }}>
+                                                    <Text style={{ fontSize: 16, fontWeight: 500 }}>Deliver to this address</Text>
+                                                </View>
+                                            </Pressable>
+                                        }
                                     </View>
                                 </View>)
                             }
@@ -107,8 +110,36 @@ const ConfirmScreen = () => {
                         </View>
                     }
                     {currentStep == 1 && <View>
-                        <Text>Delivery details</Text>
+                        <View style={{ marginVertical: 10, gap: 5, alignItems: 'center', flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Choose your delivery options</Text>
+                            <AntDesign name="downcircle" size={18} color="black" />
+                        </View>
+                        <View style={{ flexDirection: 'row', gap: 5 }}>
+                            <Pressable onPress={() => setSelectDeliveryOption(!selectDeliveryOption)}>
+                                {
+                                    selectDeliveryOption ? (<View style={{ height: 24, width: 24 }}><FontAwesome6 name="dot-circle" size={24} color="black" /></View>) : (<View style={{ height: 24, width: 24 }}><Entypo name="circle" size={24} color="black" /></View>)
+                                }
+
+                            </Pressable>
+                            <Text style={{ flex: 1 }}>
+                                <Text style={{ color: 'green' }}>Tomorrow by 10 pm-</Text>
+                                <Text>Free delivery with your premium membership</Text>
+                            </Text>
+                        </View>
+                        <Pressable disabled={!selectDeliveryOption} onPress={() => setCurrenStep(2)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                            <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20 }}>
+                                <Text style={{ fontSize: 16, fontWeight: 500 }}>Deliver to this address</Text>
+                            </View>
+                        </Pressable>
                     </View>}
+                    {
+                        currentStep == 2 && <View>
+                            <View style={{ marginVertical: 10, gap: 5, alignItems: 'center', flexDirection: 'row' }}>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Select your payment option</Text>
+                                <AntDesign name="downcircle" size={18} color="black" />
+                            </View>
+                        </View>
+                    }
                 </View>
             </ScrollView>
 
