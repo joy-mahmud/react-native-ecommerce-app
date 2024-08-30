@@ -1,4 +1,4 @@
-import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
+import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View, ScrollView, Pressable, Dimensions } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { userType } from '../UserContext'
 import axios from 'axios'
@@ -12,6 +12,8 @@ const ConfirmScreen = () => {
     const [addresses, setaddresses] = useState([])
     const [selectedAddress, setSelectedAddress] = useState('')
     const [selectDeliveryOption, setSelectDeliveryOption] = useState(false)
+    const [paymentMethod, setPaymentMethod] = useState('')
+    const width=Dimensions.get('window').width
     useEffect(() => {
         getAddresses()
     }, [])
@@ -138,6 +140,28 @@ const ConfirmScreen = () => {
                                 <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Select your payment option</Text>
                                 <AntDesign name="downcircle" size={18} color="black" />
                             </View>
+                            <View style={{ flexDirection: 'row', gap: 5, padding: 10, borderColor: '#d0d0d0', borderWidth: 1 }}>
+                                <Pressable onPress={() => setPaymentMethod("cash")}>
+                                    {
+                                        paymentMethod === "cash" ? (<View style={{ height: 24, width: 24 }}><FontAwesome6 name="dot-circle" size={24} color="black" /></View>) : (<View style={{ height: 24, width: 24 }}><Entypo name="circle" size={24} color="black" /></View>)
+                                    }
+                                </Pressable>
+                                <Text style={{ color: 'black' }}>Cash on delivery</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', gap: 5, padding: 10, borderColor: '#d0d0d0', borderWidth: 1,marginVertical:10 }}>
+                                <Pressable onPress={() => setPaymentMethod('card')}>
+                                    {
+                                        paymentMethod === "card" ? (<View style={{ height: 24, width: 24 }}><FontAwesome6 name="dot-circle" size={24} color="black" /></View>) : (<View style={{ height: 24, width: 24 }}><Entypo name="circle" size={24} color="black" /></View>)
+                                    }
+                                </Pressable>
+                                <Text style={{ color: 'black' }}>Crdit or debit card</Text>
+                            </View>
+                            <Pressable disabled={paymentMethod!='card'&&paymentMethod!='cash'} onPress={() => setCurrenStep(3)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                            <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20,width:width*.9 }}>
+                                <Text style={{ fontSize: 16, fontWeight: 500,textAlign:'center' }}>Continue</Text>
+                            </View>
+                        </Pressable>
+
                         </View>
                     }
                 </View>
