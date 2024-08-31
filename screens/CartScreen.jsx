@@ -38,7 +38,7 @@ const CartScreen = () => {
                 <View style={{ marginTop: 10, paddingHorizontal: 5 }}>
                     <Text style={{ fontSize: 16, fontWeight: 400 }}>Subtotal: ${total}</Text>
                 </View>
-                <Pressable onPress={()=>navigation.navigate('Confirm')} style={{
+                <Pressable onPress={()=>navigation.navigate('Confirm',{total})} style={{
                     backgroundColor: "#ffc72c", borderRadius: 5, padding: 10, width: '100%',marginVertical:10
                 }}>
                     <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Proceed to buy the items</Text>

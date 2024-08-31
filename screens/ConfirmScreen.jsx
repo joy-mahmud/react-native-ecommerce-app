@@ -5,6 +5,9 @@ import axios from 'axios'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
 
 const ConfirmScreen = () => {
     const [currentStep, setCurrenStep] = useState(0)
@@ -13,7 +16,10 @@ const ConfirmScreen = () => {
     const [selectedAddress, setSelectedAddress] = useState('')
     const [selectDeliveryOption, setSelectDeliveryOption] = useState(false)
     const [paymentMethod, setPaymentMethod] = useState('')
-    const width=Dimensions.get('window').width
+    const width = Dimensions.get('window').width
+    const cart = useSelector(state=>state.cart.cart)
+    const total = cart?.map(item => item.price * item.quantity).reduce((prev, curr) => curr + prev, 0)
+    console.log("order now",total)
     useEffect(() => {
         getAddresses()
     }, [])
@@ -148,7 +154,7 @@ const ConfirmScreen = () => {
                                 </Pressable>
                                 <Text style={{ color: 'black' }}>Cash on delivery</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', gap: 5, padding: 10, borderColor: '#d0d0d0', borderWidth: 1,marginVertical:10 }}>
+                            <View style={{ flexDirection: 'row', gap: 5, padding: 10, borderColor: '#d0d0d0', borderWidth: 1, marginVertical: 10 }}>
                                 <Pressable onPress={() => setPaymentMethod('card')}>
                                     {
                                         paymentMethod === "card" ? (<View style={{ height: 24, width: 24 }}><FontAwesome6 name="dot-circle" size={24} color="black" /></View>) : (<View style={{ height: 24, width: 24 }}><Entypo name="circle" size={24} color="black" /></View>)
@@ -156,12 +162,30 @@ const ConfirmScreen = () => {
                                 </Pressable>
                                 <Text style={{ color: 'black' }}>Crdit or debit card</Text>
                             </View>
-                            <Pressable disabled={paymentMethod!='card'&&paymentMethod!='cash'} onPress={() => setCurrenStep(3)} style={{ alignSelf: 'center', marginTop: 10 }}>
-                            <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20,width:width*.9 }}>
-                                <Text style={{ fontSize: 16, fontWeight: 500,textAlign:'center' }}>Continue</Text>
-                            </View>
-                        </Pressable>
+                            <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => setCurrenStep(3)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                                <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
+                                    <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Continue</Text>
+                                </View>
+                            </Pressable>
 
+                        </View>
+                    }
+                    {
+                        currentStep == 3 && <View>
+                            <View style={{ marginVertical: 10, alignItems: 'end', flexDirection: 'row' }}>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Order Now</Text>
+                                <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+                            </View>
+                            <View style={{ gap: 5, padding: 10, borderColor: '#d0d0d0', borderWidth: 1, marginVertical: 10 }}>
+                              
+                                <Text style={{ color: 'black' }}>Shipping to {selectedAddress.name}</Text>
+                                <Text style={{ color: '#c60c30',fontSize:18,fontWeight:'bold' }}>Order total: <Text style={{color:'black'}}>${total}</Text></Text>
+                            </View>
+                            <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => setCurrenStep(3)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                                <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
+                                    <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Place Order</Text>
+                                </View>
+                            </Pressable>
                         </View>
                     }
                 </View>
