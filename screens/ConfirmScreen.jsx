@@ -6,10 +6,13 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useSelector } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { cleanCart } from '../redux/cartReducer';
 
 const ConfirmScreen = () => {
+    const dispatch = useDispatch()
+    const navigation = useNavigation()
     const [currentStep, setCurrenStep] = useState(0)
     const { userId } = useContext(userType)
     const [addresses, setaddresses] = useState([])
@@ -31,6 +34,27 @@ const ConfirmScreen = () => {
     const handleSelectAddress = (addr) => {
         // console.log(addr)
         setSelectedAddress(addr)
+    }
+    const handlePlaceOrder = async()=>{
+       try {
+        const orderData = {
+            userId:userId,
+            cartItem:cart,
+            totalPrice:total,
+            shippingAddress:selectedAddress,
+            paymentMethod:paymentMethod
+
+        }
+        const response = await  axios.post('http://192.168.2.143:8000/orders',orderData)
+        if(response.status==200){
+            navigation.navigate('Order')
+            dispatch(cleanCart())
+        } else{
+            console.log('error placing orders',response.data)
+        }
+       } catch (error) {
+        console.log(error)
+       }
     }
 
     // useFocusEffect(

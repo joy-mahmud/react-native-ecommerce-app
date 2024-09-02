@@ -158,7 +158,7 @@ app.post('/orders',async(req,res)=>{
             return res.status(404).json({message:'User not found'})
         }
         const products= cartItem.map((item)=>({
-            name:item?.name,
+            name:item?.title,
             quantity:item?.quantity,
             price:item?.price,
             image:item?.price
@@ -175,5 +175,34 @@ app.post('/orders',async(req,res)=>{
     } catch (error) {
         console.log('errorr creating orders ',error)
         res.status(500).json({message:'Error creating orders'})
+    }
+})
+//user profile get api
+app.get('/profile/:userId',async(req,res)=>{
+    try {
+        const userId = req.params.userId
+        const user = await User.findById(userId)
+        if(!user){
+           return res.status(404).json({message:'user not found'})
+        }
+        res.status(200).json({user})
+    } catch (error) {
+        console.log('error fetching user',error)
+        res.status(500).json({message:'Error fetching user'})
+    }
+})
+
+//order get api
+app.get('/oreders/:userId',async(req,res)=>{
+    try {
+        const userId = req.params.userId
+        const orders = await Order.find({user:userId}).populate("user")
+        if(!orders || orders.length==0){
+            return res.status(404).json({message:'no orders found'})
+        }
+        res.status(200).json({orders})
+    } catch (error) {
+        console.log('error fetching orders',error)
+        res.status(500).json({message:'error fetching orders'})
     }
 })

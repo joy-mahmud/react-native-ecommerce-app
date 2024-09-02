@@ -15,6 +15,7 @@ import Addresses from '../screens/Addresses';
 import Profilescreen from '../screens/Profilescreen';
 import CartScreen from '../screens/CartScreen';
 import ConfirmScreen from '../screens/ConfirmScreen';
+import OrderScreen from '../screens/OrderScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 function BottomTabs(){
@@ -64,6 +65,7 @@ const StackNavigator = () => {
                 <Stack.Screen name = "Address" component={Addresses} options={{headerShown:false}}/>
                 <Stack.Screen name = "AddAddress" component={AddAddressScreen} options={{headerShown:false}}/>
                 <Stack.Screen name = "Confirm" component={ConfirmScreen} options={{headerShown:false}}/>
+                <Stack.Screen name = "Order" component={OrderScreen} options={{headerShown:false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
