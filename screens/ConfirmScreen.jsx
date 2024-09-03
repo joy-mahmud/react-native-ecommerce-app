@@ -205,7 +205,7 @@ const ConfirmScreen = () => {
                                 <Text style={{ color: 'black' }}>Shipping to {selectedAddress.name}</Text>
                                 <Text style={{ color: '#c60c30',fontSize:18,fontWeight:'bold' }}>Order total: <Text style={{color:'black'}}>${total}</Text></Text>
                             </View>
-                            <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => setCurrenStep(3)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                            <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => handlePlaceOrder()} style={{ alignSelf: 'center', marginTop: 10 }}>
                                 <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
                                     <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Place Order</Text>
                                 </View>

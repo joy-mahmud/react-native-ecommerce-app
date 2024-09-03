@@ -193,7 +193,7 @@ app.get('/profile/:userId',async(req,res)=>{
 })
 
 //order get api
-app.get('/oreders/:userId',async(req,res)=>{
+app.get('/orders/:userId',async(req,res)=>{
     try {
         const userId = req.params.userId
         const orders = await Order.find({user:userId}).populate("user")
