@@ -161,7 +161,7 @@ app.post('/orders',async(req,res)=>{
             name:item?.title,
             quantity:item?.quantity,
             price:item?.price,
-            image:item?.price
+            image:item?.image
         }))
         const order = new Order({
             user:userId,

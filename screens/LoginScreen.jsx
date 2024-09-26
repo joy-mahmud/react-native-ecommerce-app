@@ -13,7 +13,8 @@ const LoginScreen = () => {
     useEffect(()=>{
         const checkLoginStatus = async()=>{
             try {
-               const token = AsyncStorage.getItem('authToken');
+               const token = await AsyncStorage.getItem('authToken');
+            //    console.log('token',token)
                if(token){
                 navigation.replace('Main')
                } 
@@ -31,6 +32,7 @@ const LoginScreen = () => {
         axios.post('http://192.168.2.143:8000/login',user)
         .then((response)=>{
             const token = response.data.token
+            console.log('authtoken',token)
             AsyncStorage.setItem('authToken',token)
             navigation.replace("Main")
         }).catch((error)=>{
