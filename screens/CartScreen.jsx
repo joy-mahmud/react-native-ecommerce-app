@@ -1,4 +1,4 @@
-import { Image, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Button, Image, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -10,23 +10,23 @@ import { useNavigation } from '@react-navigation/native';
 
 const CartScreen = () => {
     const cart = useSelector(state => state.cart.cart)
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const navigation = useNavigation()
     const total = cart?.map(item => item.price * item.quantity).reduce((prev, curr) => curr + prev, 0)
     console.log(total)
-    const handeleIncrement=(item)=>{
+    const handeleIncrement = (item) => {
         dispatch(incrementQuantity(item))
     }
-    const handeleDecrement =(item)=>{
+    const handeleDecrement = (item) => {
         dispatch(decrementQuantity(item))
     }
-    const handeleDelete=(item)=>{
+    const handeleDelete = (item) => {
         dispatch(removeFromCart(item))
     }
     return (
-        <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? 0 : 0, flex: 1, backgroundColor: 'white',marginHorizontal:5 }}>
+        <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? 0 : 0, flex: 1, backgroundColor: 'white', marginHorizontal: 5 }}>
             <ScrollView>
-                <View style={{ backgroundColor: "#00ced1", padding: 10, flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                {/* <View style={{ backgroundColor: "#00ced1", padding: 10, flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                     <Pressable style={{ flex: 1, backgroundColor: 'white', flexDirection: "row", gap: 5, alignItems: "center" }}>
                         <Feather style={{ paddingLeft: 8 }} name="search" size={22} color="black" />
                         <TextInput placeholder='Search your items'></TextInput>
@@ -34,18 +34,34 @@ const CartScreen = () => {
                     </Pressable>
                     <Feather name="mic" size={24} color="black" />
 
+                </View> */}
+                <View style={{ paddingVertical: 10, backgroundColor: '#101010' }}>
+
+                    <Text style={{ textAlign: 'center', color: 'white', fontSize: 25, fontWeight: 500 }}>EasyShop-BD</Text>
                 </View>
-                <View style={{ marginTop: 10, paddingHorizontal: 5 }}>
-                    <Text style={{ fontSize: 16, fontWeight: 400 }}>Subtotal: ${total}</Text>
-                </View>
-                <Pressable onPress={()=>navigation.navigate('Confirm',{total})} style={{
-                    backgroundColor: "#ffc72c", borderRadius: 5, padding: 10, width: '100%',marginVertical:10
-                }}>
-                    <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Proceed to buy the items</Text>
-                </Pressable>
+                {
+                    cart?.length == 0 ? (<View style={{ height: 400, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontsize: 30, fontWeight: '500', marginVertical: 10 }}>No items in the cart</Text>
+                        <Pressable onPress={() => navigation.navigate('Home')} style={{
+                            backgroundColor: "#101010", borderRadius: 5, padding: 10, paddingHorizontal:30, marginVertical: 10
+                        }}>
+                            <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center', color: 'white' }}>Back to Home</Text>
+                        </Pressable>
+                    </View>
+                    ) : (<><View style={{ marginTop: 10, paddingHorizontal: 5 }}>
+                        <Text style={{ fontSize: 18, fontWeight: 400 }}>Subtotal: ${total}</Text>
+                    </View>
+                        <Pressable onPress={() => navigation.navigate('Confirm', { total })} style={{
+                            backgroundColor: "#101010", borderRadius: 5, padding: 10, width: '100%', marginVertical: 10
+                        }}>
+                            <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center', color: 'white' }}>Proceed to buy the items</Text>
+                        </Pressable>
+                    </>
+                    )
+                }
                 <View style={{ gap: 10, marginVertical: 15 }}>
                     {
-                        cart?.map((item, index) => <View key={index} style={{gap:20,borderBottomColor: "#d0d0d0", borderBottomWidth: 1, paddingBottom: 5 }}>
+                        cart?.map((item, index) => <View key={index} style={{ gap: 20, borderBottomColor: "#d0d0d0", borderBottomWidth: 1, paddingBottom: 5 }}>
                             <View style={{ flexDirection: 'row', gap: 15, }}>
                                 <Image source={{ uri: item.image }} style={{ height: 130, width: 120 }} resizeMode='contain' ></Image>
                                 <View style={{ width: 170, gap: 5 }}>
@@ -55,18 +71,18 @@ const CartScreen = () => {
                                 </View>
                             </View>
 
-                            <View style={{ flexDirection: 'row', alignItems: 'center',gap:10, marginLeft:10 }}>
-                                
-                            {item.quantity>1?<Pressable onPress={()=>handeleDecrement(item)}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginLeft: 10 }}>
+
+                                {item.quantity > 1 ? <Pressable onPress={() => handeleDecrement(item)}>
                                     <AntDesign name="minuscircle" size={24} color="black" />
-                                </Pressable>:<Pressable onPress={()=>handeleDecrement(item)}>
+                                </Pressable> : <Pressable onPress={() => handeleDecrement(item)}>
                                     <MaterialCommunityIcons name="delete-circle" size={28} color="black" />
                                 </Pressable>}
-                                <Text style={{paddingVertical:5,paddingHorizontal:10,borderRadius:5,backgroundColor:'#d0d0d0',fontWeight:500}}>{item.quantity}</Text>
-                                <Pressable onPress={()=>handeleIncrement(item)}>
+                                <Text style={{ paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5, backgroundColor: '#d0d0d0', fontWeight: 500 }}>{item.quantity}</Text>
+                                <Pressable onPress={() => handeleIncrement(item)}>
                                     <AntDesign name="pluscircle" size={24} color="black" />
                                 </Pressable>
-                                <Pressable onPress={()=>handeleDelete(item)} style={{paddingHorizontal:5,paddingVertical:3,borderWidth:1,borderColor:'#d0d0d0',borderRadius:5}}>
+                                <Pressable onPress={() => handeleDelete(item)} style={{ paddingHorizontal: 5, paddingVertical: 3, borderWidth: 1, borderColor: '#d0d0d0', borderRadius: 5 }}>
                                     <Text>Delete</Text>
                                 </Pressable>
                             </View>

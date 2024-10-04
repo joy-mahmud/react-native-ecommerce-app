@@ -42,7 +42,7 @@ const LoginScreen = () => {
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0, flex: 1 }}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: 30, }}><Text style={{ fontWeight: 800, fontSize: 32, }}>E-com.</Text></View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: 30, }}><Text style={{ fontWeight: 800, fontSize: 32, }}>EasyShop-BD</Text></View>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
 
                     <View>
@@ -61,7 +61,7 @@ const LoginScreen = () => {
                         <Text style={{ fontSize: 16, fontWeight: 500, color: '#007fff' }}>Forgot password?</Text>
                     </View>
                     <View style={{ marginTop: 70, alignItems: 'center' }}>
-                        <Pressable onPress={handleLogin} style={{ width: 200, backgroundColor: '#febe10', borderRadius: 6, paddingVertical: 10 }}>
+                        <Pressable onPress={handleLogin} style={{ width: 200, backgroundColor: '#101010', borderRadius: 6, paddingVertical: 10 }}>
                             <Text style={{ textAlign: 'center', color: 'white', fontSize: 16, fontWeight: 'bold', }}>Login</Text>
 
                         </Pressable>
