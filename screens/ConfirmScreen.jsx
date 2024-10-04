@@ -9,6 +9,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { cleanCart } from '../redux/cartReducer';
+import Payment from '../components/Payment';
 
 const ConfirmScreen = () => {
     const dispatch = useDispatch()
@@ -20,9 +21,9 @@ const ConfirmScreen = () => {
     const [selectDeliveryOption, setSelectDeliveryOption] = useState(false)
     const [paymentMethod, setPaymentMethod] = useState('')
     const width = Dimensions.get('window').width
-    const cart = useSelector(state=>state.cart.cart)
+    const cart = useSelector(state => state.cart.cart)
     const total = cart?.map(item => item.price * item.quantity).reduce((prev, curr) => curr + prev, 0)
-    console.log("order now",total)
+    console.log("order now", total)
     useEffect(() => {
         getAddresses()
     }, [])
@@ -35,26 +36,28 @@ const ConfirmScreen = () => {
         // console.log(addr)
         setSelectedAddress(addr)
     }
-    const handlePlaceOrder = async()=>{
-       try {
-        const orderData = {
-            userId:userId,
-            cartItem:cart,
-            totalPrice:total,
-            shippingAddress:selectedAddress,
-            paymentMethod:paymentMethod
+    const handlePlaceOrder = async (status) => {
+        setCurrenStep(3)
+        try {
+            const orderData = {
+                userId: userId,
+                cartItem: cart,
+                totalPrice: total,
+                shippingAddress: selectedAddress,
+                paymentMethod: paymentMethod,
+                paymentStatus: status
 
+            }
+            const response = await axios.post('http://192.168.2.143:8000/orders', orderData)
+            if (response.status == 200) {
+                navigation.navigate('Order')
+                dispatch(cleanCart())
+            } else {
+                console.log('error placing orders', response.data)
+            }
+        } catch (error) {
+            console.log(error)
         }
-        const response = await  axios.post('http://192.168.2.143:8000/orders',orderData)
-        if(response.status==200){
-            navigation.navigate('Order')
-            dispatch(cleanCart())
-        } else{
-            console.log('error placing orders',response.data)
-        }
-       } catch (error) {
-        console.log(error)
-       }
     }
 
     // useFocusEffect(
@@ -65,7 +68,7 @@ const ConfirmScreen = () => {
     // )
     const steps = [
         { title: 'Address', content: "Address form" },
-        { title: 'Delivery', content: 'Delivery details' },
+        // { title: 'Delivery', content: 'Delivery details' },
         { title: 'Payment', content: 'Payment methods' },
         { title: 'Place order', content: 'Order summary' }
     ]
@@ -129,8 +132,8 @@ const ConfirmScreen = () => {
                                         </View>
                                         {
                                             selectedAddress && selectedAddress._id == addr._id && <Pressable onPress={() => setCurrenStep(1)}>
-                                                <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 20 }}>
-                                                    <Text style={{ fontSize: 16, fontWeight: 500 }}>Deliver to this address</Text>
+                                                <View style={{ backgroundColor: '#101010', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 20 }}>
+                                                    <Text style={{ fontSize: 16, fontWeight: 500, color: 'white' }}>Deliver to this address</Text>
                                                 </View>
                                             </Pressable>
                                         }
@@ -141,7 +144,7 @@ const ConfirmScreen = () => {
 
                         </View>
                     }
-                    {currentStep == 1 && <View>
+                    {/* {currentStep == 1 && <View>
                         <View style={{ marginVertical: 10, gap: 5, alignItems: 'center', flexDirection: 'row' }}>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Choose your delivery options</Text>
                             <AntDesign name="downcircle" size={18} color="black" />
@@ -163,9 +166,9 @@ const ConfirmScreen = () => {
                                 <Text style={{ fontSize: 16, fontWeight: 500 }}>Deliver to this address</Text>
                             </View>
                         </Pressable>
-                    </View>}
+                    </View>} */}
                     {
-                        currentStep == 2 && <View>
+                        currentStep == 1 && <View>
                             <View style={{ marginVertical: 10, gap: 5, alignItems: 'center', flexDirection: 'row' }}>
                                 <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Select your payment option</Text>
                                 <AntDesign name="downcircle" size={18} color="black" />
@@ -186,30 +189,47 @@ const ConfirmScreen = () => {
                                 </Pressable>
                                 <Text style={{ color: 'black' }}>Crdit or debit card</Text>
                             </View>
-                            <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => setCurrenStep(3)} style={{ alignSelf: 'center', marginTop: 10 }}>
-                                <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
-                                    <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Continue</Text>
+                            <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => setCurrenStep(2)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                                <View style={{ backgroundColor: '#101010', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
+                                    <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center', color: 'white' }}>Continue</Text>
                                 </View>
                             </Pressable>
+                            <Pressable  onPress={() => setCurrenStep(0)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                                    <View style={{ backgroundColor: '#101010', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
+                                        <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center', color: 'white' }}>Go back</Text>
+                                    </View>
+                                </Pressable>
 
                         </View>
                     }
                     {
-                        currentStep == 3 && <View>
+                        currentStep == 2 && <View>
                             <View style={{ marginVertical: 10, alignItems: 'end', flexDirection: 'row' }}>
                                 <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Order Now</Text>
                                 <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                             </View>
                             <View style={{ gap: 5, padding: 10, borderColor: '#d0d0d0', borderWidth: 1, marginVertical: 10 }}>
-                              
+
                                 <Text style={{ color: 'black' }}>Shipping to {selectedAddress.name}</Text>
-                                <Text style={{ color: '#c60c30',fontSize:18,fontWeight:'bold' }}>Order total: <Text style={{color:'black'}}>${total}</Text></Text>
+                                <Text style={{ color: '#c60c30', fontSize: 18, fontWeight: 'bold' }}>Order total: <Text style={{ color: 'black' }}>${total}</Text></Text>
                             </View>
-                            <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => handlePlaceOrder()} style={{ alignSelf: 'center', marginTop: 10 }}>
-                                <View style={{ backgroundColor: '#ffc72c', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
-                                    <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center' }}>Place Order</Text>
-                                </View>
-                            </Pressable>
+                            {paymentMethod === 'card' && <>
+                                <Payment handlePlaceOrder={handlePlaceOrder} total={total}></Payment>
+                                <Pressable  onPress={() => setCurrenStep(1)} style={{ alignSelf: 'center', marginTop: 10 }}>
+                                    <View style={{ backgroundColor: '#101010', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
+                                        <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center', color: 'white' }}>Go back</Text>
+                                    </View>
+                                </Pressable>
+                            </>
+                            }
+                            {
+                                paymentMethod === 'cash' &&
+                                <Pressable disabled={paymentMethod != 'card' && paymentMethod != 'cash'} onPress={() => handlePlaceOrder('due')} style={{ alignSelf: 'center', marginTop: 10 }}>
+                                    <View style={{ backgroundColor: '#101010', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, width: width * .9 }}>
+                                        <Text style={{ fontSize: 16, fontWeight: 500, textAlign: 'center', color: 'white' }}>Place Order</Text>
+                                    </View>
+                                </Pressable>
+                            }
                         </View>
                     }
                 </View>

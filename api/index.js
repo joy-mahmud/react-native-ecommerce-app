@@ -7,6 +7,7 @@ const app = express()
 const port = 8000
 const cors = require('cors')
 app.use(cors());
+const stripe = require('stripe')('sk_test_51OGypQAhHVSLKzJ68RQgOgbrYtiUZkWceeNgjbs3Ht2RCFPgUHzGvrfRmoXJ1uinJwtRhUnVkP8BpUMaGil2ww6Q00nnw0hHsZ')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -26,6 +27,7 @@ app.listen(port, () => {
 
 const User = require('./models/user')
 const Order = require('./models/order')
+const { default: Stripe } = require('stripe')
 
 const sendVerificationEmail = async (email, verificationToken) => {
     //create a nodemailer transporter
@@ -152,7 +154,7 @@ app.get('/addresses/:userId',async(req,res)=>{
 //order endpoints
 app.post('/orders',async(req,res)=>{
     try {
-        const {userId,cartItem,totalPrice,shippingAddress,paymentMethod} = req.body
+        const {userId,cartItem,totalPrice,shippingAddress,paymentMethod,paymentStatus} = req.body
         const user = await User.findById(userId)
         if(!user){
             return res.status(404).json({message:'User not found'})
@@ -168,7 +170,8 @@ app.post('/orders',async(req,res)=>{
             products:products,
             totalPrice:totalPrice,
             shippingAddress:shippingAddress,
-            paymentMethod:paymentMethod
+            paymentMethod:paymentMethod,
+            paymentStatus:paymentStatus
         })
         await order.save()
         res.status(200).json({message:'Order created successfully'})
@@ -206,3 +209,25 @@ app.get('/orders/:userId',async(req,res)=>{
         res.status(500).json({message:'error fetching orders'})
     }
 })
+
+//payment api
+app.post('/paymentIntent', async (req, res) => {
+    try {
+      const price = req.body.amount;
+      const amount = parseInt(price * 100); 
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: 'usd',
+        automatic_payment_methods: {
+            enabled: true,
+        }
+    
+      });
+  
+      res.send({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+      res.status(400).json({ error: error.message }); 
+      console.log(error);
+    }
+  });
+  

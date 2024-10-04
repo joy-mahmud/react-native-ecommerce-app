@@ -36,19 +36,19 @@ const Profilescreen = () => {
                     text: "OK",
                     onPress: async () => {
                         try {
-                            await AsyncStorage.removeItem('authToken'); // Remove the token
+                            await AsyncStorage.removeItem('authToken'); 
                             console.log('Token deleted successfully');
-                            navigation.navigate('Login'); // Navigate to login screen after logout
+                            navigation.navigate('Login'); 
                         } catch (error) {
                             console.error('Error deleting token:', error);
                         }
                     }
                 },
                 {
-                    text: 'Cancel', style: "cancel" // Cancel button does nothing
+                    text: 'Cancel', style: "cancel" 
                 }
             ],
-            { cancelable: true } // The alert can be dismissed by tapping outside
+            { cancelable: true } 
         );
     };
 

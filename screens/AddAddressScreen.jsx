@@ -1,10 +1,12 @@
-import { Alert, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { userType } from '../UserContext';
+import Entypo from '@expo/vector-icons/Entypo';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
+import { BottomModal, ModalContent, SlideAnimation } from 'react-native-modals';
 const AddAddressScreen = () => {
     const navigation = useNavigation()
     const [country, setcountry] = useState("")
@@ -14,34 +16,34 @@ const AddAddressScreen = () => {
     const [street, setStreet] = useState("")
     const [postalCode, setPostalCode] = useState("")
     const [landmark, setLandmark] = useState("")
-    const { userId} = useContext(userType)
+    const { userId } = useContext(userType)
 
 
-console.log(userId)
+    console.log(userId)
 
-const handleAddAddress = ()=>{
-    const address = {
-        name,
-        mobileNo,
-        houseNo,
-        street,
-        landmark,
-        postalCode
+    const handleAddAddress = () => {
+        const address = {
+            name,
+            mobileNo,
+            houseNo,
+            street,
+            landmark,
+            postalCode
+        }
+        axios.post("http://192.168.2.143:8000/addresses", { userId, address })
+            .then((responst) => {
+                Alert.alert("success", "address added successfully")
+                setName('')
+                setMobileNo('')
+                setHouseNo('')
+                setStreet('')
+                setLandmark('')
+                setPostalCode('')
+                navigation.goBack()
+            }
+            )
+            .catch(error => Alert.alert("Error", "failed to add address."))
     }
-    axios.post("http://192.168.2.143:8000/addresses",{userId,address})
-    .then((responst)=>{
-        Alert.alert("success","address added successfully")
-        setName('')
-        setMobileNo('')
-        setHouseNo('')
-        setStreet('')
-        setLandmark('')
-        setPostalCode('')
-        navigation.goBack()
-    }
-    )
-    .catch(error=>Alert.alert("Error","failed to add address."))
-}
 
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0, paddingHorizontal: 5, flex: 1 }}>
@@ -109,12 +111,12 @@ const handleAddAddress = ()=>{
                         style={{ padding: 10, borderWidth: 1, borderColor: '#dododo', marginTop: 10, borderRadius: 5 }}
                     />
                 </View>
-                <Pressable onPress={()=>handleAddAddress()} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 15, marginTop: 15, borderRadius: 5, alignItems: 'center', marginBottom: 50 }}>
-                    <Text style={{ fontSize: 16, fontWeight: 500 }}>Add Address</Text>
+                <Pressable onPress={() => handleAddAddress()} style={{ backgroundColor: '#101010', paddingHorizontal: 20, paddingVertical: 15, marginTop: 15, borderRadius: 5, alignItems: 'center', marginBottom: 50 }}>
+                    <Text style={{ fontSize: 16, fontWeight: 500,color:'white' }}>Add Address</Text>
 
                 </Pressable>
 
-
+           
             </ScrollView>
         </SafeAreaView>
     )

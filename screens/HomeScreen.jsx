@@ -12,6 +12,7 @@ import { BottomModal, ModalContent, SlideAnimation } from 'react-native-modals';
 import { useNavigation } from '@react-navigation/native';
 import { userType } from '../UserContext';
 
+
 const HomeScreen = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(false)
@@ -19,8 +20,7 @@ const HomeScreen = () => {
     const width = Dimensions.get('window').width;
     const navigation = useNavigation()
     const { userId } = useContext(userType)
-    const [addresses, setaddresses] = useState([])
-    const [selectedAddress, setSelectedAddress] = useState('')
+  
     const gadgets = [
         {
             "id": 1,
@@ -64,9 +64,13 @@ const HomeScreen = () => {
         }
     ]
     const sliderImages = [
-        "https://i.ibb.co/x2zjB9q/laptop-gadgets.jpg",
-        "https://i.ibb.co/fM2QnpN/mobile-gadgets.jpg",
-        "https://i.ibb.co/1myRrYz/electronics.jpg"
+        'https://i.ibb.co.com/kSZrdHW/big-Headphone.jpg',
+        'https://i.ibb.co.com/ZxrT6NK/cameras.jpg',
+        'https://i.ibb.co.com/QCYx1rJ/macbook1.jpg',
+        'https://i.ibb.co.com/QjZx3SM/drone.jpg',
+        'https://i.ibb.co.com/4WppnK4/watches.jpg',
+        'https://i.ibb.co.com/7vt102j/laptop-cameras.jpg'
+       
     ]
     useEffect(() => {
         const getProducts = async () => {
@@ -78,16 +82,7 @@ const HomeScreen = () => {
         getProducts()
 
     }, [])
-    useEffect(() => {
-        getAddresses()
-    }, [])
-    const getAddresses = async () => {
-        setLoading(true)
-        console.log("modal:", userId)
-        const response = await axios.get(`http://192.168.2.143:8000/addresses/${userId}`)
-        setLoading(false)
-        setaddresses(response.data.addresses)
-    }
+ 
 
     // const cart = useSelector((state) => state.cart.cart)
     // console.log(cart)
@@ -123,7 +118,7 @@ const HomeScreen = () => {
         <>
             <SafeAreaView style={{ paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0, flex: 1, backgroundColor: 'white' }}>
                 <ScrollView>
-                    <View style={{ backgroundColor: "#00ced1", padding: 10, flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                    {/* <View style={{ backgroundColor: "#00ced1", padding: 10, flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                         <Pressable style={{ flex: 1, backgroundColor: 'white', flexDirection: "row", gap: 5, alignItems: "center" }}>
                             <Feather style={{ paddingLeft: 8 }} name="search" size={22} color="black" />
                             <TextInput placeholder='Search your items'></TextInput>
@@ -131,29 +126,22 @@ const HomeScreen = () => {
                         </Pressable>
                         <Feather name="mic" size={24} color="black" />
 
+                        
+                    </View> */}
+                    <View style={{ paddingVertical: 10, backgroundColor: '#101010' }}>
+
+                        <Text style={{ textAlign: 'center', color: 'white', fontSize: 25, fontWeight: 500 }}>EasyShop-BD</Text>
                     </View>
-                    <Pressable onPress={() => setmodalVisible(!modalVisible)} style={{ padding: 10, flexDirection: 'row', gap: 5, backgroundColor: "#afeeee", alignItems: 'center' }}>
+                    {/* <Pressable onPress={() => setmodalVisible(!modalVisible)} style={{ padding: 10, flexDirection: 'row', gap: 5, backgroundColor: "#afeeee", alignItems: 'center' }}>
                         <Ionicons name="location-outline" size={24} color="black" />
                         {selectedAddress ? <Text>Deliver to {selectedAddress}</Text> : <Text>Add an address</Text>}
                         <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
-                    </Pressable>
+                    </Pressable> */}
 
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        {
-                            gadgets.map((item, index) => {
-                                return (
-                                    <Pressable key={index} style={{ alignItems: 'center', justifyContent: 'center', gap: 3, margin: 10 }}>
-                                        <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: item.image }}></Image>
-                                        <Text style={{ textAlign: 'center', fontSize: 16 }}>{item.name}</Text>
-                                    </Pressable>
-                                )
-                            })
-                        }
 
-                    </ScrollView>
 
                     <View>
-                        <Text style={{ fontSize: 18, fontWeight: 500 }}>Trending products</Text>
+                        <Text style={{ fontSize: 18, fontWeight: 500,textAlign:'center' }}>Top products</Text>
 
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
@@ -161,10 +149,10 @@ const HomeScreen = () => {
                             loop
                             pagingEnabled={true}
                             width={width}
-                            height={200}
+                            height={250}
                             autoPlay={true}
                             data={[...new Array(3).keys()]}
-                            scrollAnimationDuration={2000}
+                            scrollAnimationDuration={4000}
                             // onSnapToItem={(index) => console.log('current index:', index)}
                             mode="parallax"
                             modeConfig={{
@@ -179,12 +167,25 @@ const HomeScreen = () => {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    <Image style={{ width: '100%', height: 200, borderRadius: 8 }} resizeMode='streach' source={{ uri: sliderImages[index] }} />
+                                    <Image style={{ width: '100%', height: 250, borderRadius: 8 }} resizeMode='streach' source={{ uri: sliderImages[index] }} />
 
                                 </View>
                             )}
                         />
                     </View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {
+                            gadgets.map((item, index) => {
+                                return (
+                                    <Pressable key={index} style={{ alignItems: 'center', justifyContent: 'center', gap: 3, margin: 10 }}>
+                                        <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: item.image }}></Image>
+                                        <Text style={{ textAlign: 'center', fontSize: 16 }}>{item.name}</Text>
+                                    </Pressable>
+                                )
+                            })
+                        }
+
+                    </ScrollView>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
                         {
                             products?.map((item, index) => <ProductItem key={index} item={item} />)
@@ -193,58 +194,7 @@ const HomeScreen = () => {
                 </ScrollView>
 
             </SafeAreaView>
-            <BottomModal
-                onBackdropPress={() => setmodalVisible(!modalVisible)}
-                swipeDirection={['up', 'down']}
-                swipeThreshold={200}
-                modalAnimation={
-                    new SlideAnimation({
-                        slideFrom: 'bottom'
-                    })
-                }
-                onHardwareBackPress={() => setmodalVisible(!modalVisible)}
-                visible={modalVisible}
-                onTouchOutside={() => setmodalVisible(!modalVisible)}
-            >
-                <ModalContent style={{ width: '100%', height: 400 }}>
-                    <View>
-                        <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 5 }}>Choose your location</Text>
-                        <Text style={{ fontSize: 13, fontWeight: '400', color: "gray" }}>Select a delivery location to see product availability and delivery options</Text>
-                    </View>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ gap: 5, marginTop: 10 }}>
-
-                        {
-                            loading ? <ActivityIndicator></ActivityIndicator> : addresses?.map((addr, index) => <Pressable onPress={() => handleAddressClicked(addr)} key={index} style={{ width: 130, height: 130, borderWidth: 1, borderColor: "#d0d0d0", borderRadius: 5, alignItems: 'center', justifyContent: "center",marginRight:10 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ fontSize: 18, fontWeight: '500' }}>{addr.name}</Text>
-                                    <Entypo name="location-pin" size={22} color="red" />
-                                </View>
-                            </Pressable>)
-                        }
-                    </ScrollView>
-                    <View style={{ flexDirection: 'column', }}>
-                        <Pressable onPress={() => { setmodalVisible(false); navigation.navigate('Address') }} style={{ backgroundColor: '#ffc72c', paddingHorizontal: 20, paddingVertical: 8, marginTop: 15, borderRadius: 20, alignItems: 'center' }}>
-                            <Text style={{ fontWeight: 500 }}>Add a adress</Text>
-                        </Pressable>
-                        <View style={{ flexDirection: 'column', marginTop: 20, gap: 5, }}>
-                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                                <Entypo name="location-pin" size={22} color="#0066b2" />
-                                <Text style={{ color: '#0066b2' }} >Enter a Bangladeshi precode</Text>
-
-                            </View>
-                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                                <MaterialIcons name="location-searching" size={22} color="#0066b2" />
-                                <Text style={{ color: '#0066b2' }} >use my current location</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                                <AntDesign name="earth" size={22} color="#0066b2" />
-                                <Text style={{ color: '#0066b2' }} >Deliver outside Bangladesh</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                </ModalContent>
-            </BottomModal>
+          
         </>
     )
 }
