@@ -75,9 +75,10 @@ const HomeScreen = () => {
     useEffect(() => {
         const getProducts = async () => {
 
-            const response = await axios.get('https://fakestoreapi.com/products')
+            //const response = await axios.get('https://fakestoreapi.com/products')
+            const response = await axios.get('http://192.168.2.143:8000/products')
             setProducts(response.data)
-            // console.log(products)
+            //console.log(response.data)
         }
         getProducts()
 

@@ -66,6 +66,9 @@ const orderSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    deliveryStatus:{
+        type:String
+    },
     createdAt: {
         type: Date,
         default: Date.now
